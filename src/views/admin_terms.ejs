@@ -1,0 +1,16 @@
+<div class="flex-between">
+  <h1>Terms & Conditions</h1>
+  <a class="btn" href="/admin">Back</a>
+</div>
+
+<section class="card">
+  <form method="post" action="/admin/terms">
+    <label>Terms Content (supports plain text; HTML allowed for links/buttons)
+      <textarea name="content" rows="16"><%= terms %></textarea>
+    </label>
+    <button type="submit">Save Terms</button>
+  </form>
+</section>
+
+
+

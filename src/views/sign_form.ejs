@@ -1,0 +1,50 @@
+<section class="card narrow">
+  <h1>Sign Offer</h1>
+  <% if (typeof error !== 'undefined') { %>
+    <div class="alert error"><%= error %></div>
+  <% } %>
+  <form method="post" action="/employee/offer/<%= offer.id %>/sign" onsubmit="return captureSignature()">
+    <p class="muted">By signing below, you agree to the terms of this offer.</p>
+    <label>Your full name (as signature)
+      <input type="text" name="signed_name" value="<%= (employee && employee.full_name) || '' %>" required />
+    </label>
+    <label class="checkbox">
+      <input type="checkbox" name="consent" /> I agree and sign digitally
+    </label>
+    <div style="margin:10px 0">
+      <canvas id="sig" width="500" height="150" style="background:#0f1735;border:1px solid #2a356b;border-radius:8px"></canvas>
+      <div style="margin-top:6px">
+        <button type="button" class="btn" onclick="clearSignature()">Clear</button>
+      </div>
+      <input type="hidden" name="signature_data" id="signature_data" />
+    </div>
+    <button type="submit">Submit Signature</button>
+  </form>
+</section>
+
+
+<script>
+  const canvas = document.getElementById('sig');
+  const ctx = canvas.getContext('2d');
+  let drawing = false; let lastX=0, lastY=0; let drawn=false;
+  const ratio = window.devicePixelRatio || 1;
+  function resize(){
+    const w = 500, h = 150;
+    canvas.width = w * ratio; canvas.height = h * ratio;
+    canvas.style.width = w + 'px'; canvas.style.height = h + 'px';
+    ctx.setTransform(1,0,0,1,0,0);
+    ctx.scale(ratio, ratio);
+    ctx.lineWidth = 2; ctx.lineJoin='round'; ctx.lineCap='round'; ctx.strokeStyle='#fff';
+  }
+  resize();
+  function pos(e){const rect=canvas.getBoundingClientRect(); const client = e.touches? e.touches[0]: e; return {x: client.clientX-rect.left, y: client.clientY-rect.top};}
+  function start(e){drawing=true; drawn=true; const p=pos(e); lastX=p.x; lastY=p.y;}
+  function move(e){ if(!drawing) return; const p=pos(e); ctx.beginPath(); ctx.moveTo(lastX,lastY); ctx.lineTo(p.x,p.y); ctx.stroke(); lastX=p.x; lastY=p.y;}
+  function end(){drawing=false;}
+  canvas.addEventListener('mousedown', start); canvas.addEventListener('mousemove', move); window.addEventListener('mouseup', end);
+  canvas.addEventListener('touchstart', start, {passive:true}); canvas.addEventListener('touchmove', move, {passive:true}); window.addEventListener('touchend', end);
+  function clearSignature(){ ctx.clearRect(0,0,canvas.width,canvas.height); drawn=false; }
+  function captureSignature(){ if(!drawn){ alert('Please draw your signature.'); return false; } document.getElementById('signature_data').value = canvas.toDataURL('image/png'); return true; }
+  window.clearSignature = clearSignature; window.captureSignature = captureSignature;
+</script>
+

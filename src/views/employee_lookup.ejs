@@ -1,0 +1,14 @@
+<section class="card narrow">
+  <h1>Find Your Offer</h1>
+  <% if (typeof error !== 'undefined') { %>
+    <div class="alert error"><%= error %></div>
+  <% } %>
+  <form method="post" action="/employee/lookup">
+    <label>Employee ID
+      <input type="text" name="employee_code" required />
+    </label>
+    <button type="submit">View Offer</button>
+  </form>
+</section>
+
+

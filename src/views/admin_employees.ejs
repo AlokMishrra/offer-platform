@@ -1,0 +1,44 @@
+<div class="flex-between">
+  <h1>Employees</h1>
+  <a class="btn" href="/admin">Back</a>
+</div>
+
+<section class="card">
+  <h2>Add / Update Employee</h2>
+  <form method="post" action="/admin/employees/upsert">
+    <div class="grid-2">
+      <label>Employee ID<input name="employee_code" required /></label>
+      <label>Full Name<input name="full_name" /></label>
+      <label>Email<input type="email" name="email" /></label>
+    </div>
+    <label>Details (JSON)<textarea name="details_json" rows="6" placeholder='{"role":"Engineer","location":"Remote"}'></textarea></label>
+    <button type="submit">Save</button>
+  </form>
+</section>
+
+<section class="card">
+  <h2>Directory</h2>
+  <table>
+    <thead>
+      <tr><th>ID</th><th>Employee ID</th><th>Name</th><th>Email</th><th>Company ID</th><th>Actions</th></tr>
+    </thead>
+    <tbody>
+      <% (employees || []).forEach(e => { %>
+        <tr>
+          <td><%= e.id %></td>
+          <td><%= e.employee_code %></td>
+          <td><%= e.full_name || '-' %></td>
+          <td><%= e.email || '-' %></td>
+          <td><%= e.company_id || '-' %></td>
+          <td>
+            <form method="post" action="/admin/employees/<%= e.employee_code %>/generate-company-id" style="display:inline">
+              <button type="submit">Generate Company ID</button>
+            </form>
+          </td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</section>
+
+

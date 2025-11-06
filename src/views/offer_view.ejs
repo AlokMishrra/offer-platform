@@ -1,0 +1,19 @@
+<section class="card">
+  <div class="flex-between">
+    <h1>Offer Letter</h1>
+    <a class="btn" href="/employee/offer/<%= offer.id %>/sign">Sign</a>
+  </div>
+  <div class="offer-content">
+    <div><%- offerHtml %></div>
+    <% if (typeof termsHtml !== 'undefined' && termsHtml) { %>
+      <hr />
+      <h3>Terms & Conditions</h3>
+      <div><%- termsHtml %></div>
+    <% } %>
+    <div style="margin-top:12px">
+      <a class="btn" href="/employee/offer/<%= offer.id %>/pdf" target="_blank">Download PDF</a>
+    </div>
+  </div>
+</section>
+
+
